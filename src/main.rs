@@ -26,25 +26,23 @@ fn main() {
         let stdin = io::stdin();
         stdin.read_line(&mut user_input).unwrap();
 
-        media_list.push(match user_input.trim() {
+        match user_input.trim() {
             "help" => {
-                println!("<new> => add new Media, <lsit> => list all your Media");
+                println!("<new> => add new Media, <list> => list all your Media");
                 continue;
             }
-            "new" => Media::new(),
-            "list" => 
+            "new" => media_list.push(Media::new()),
+            "list" => list(&media_list),
 
             _ => {
                 println!("Command doesnt exist");
                 continue;
             }
-        });
+        }
 
         // dbg!(&media_list);
     }
 }
-
-
 
 impl Media {
     pub fn new() -> Media {
@@ -85,5 +83,11 @@ impl Media {
             mediatype,
             finished,
         }
+    }
+}
+
+fn list(media_list: &Vec<Media>) {
+    for i in 0..media_list.len() {
+        println!("{:?}", media_list[i]);
     }
 }
