@@ -26,22 +26,25 @@ fn main() {
         let stdin = io::stdin();
         stdin.read_line(&mut user_input).unwrap();
 
-        
         media_list.push(match user_input.trim() {
             "help" => {
-                println!("<new> => add new Media");
+                println!("<new> => add new Media, <lsit> => list all your Media");
                 continue;
             }
             "new" => Media::new(),
+            "list" => 
+
             _ => {
                 println!("Command doesnt exist");
                 continue;
             }
         });
 
-        dbg!(&media_list);
+        // dbg!(&media_list);
     }
 }
+
+
 
 impl Media {
     pub fn new() -> Media {
@@ -59,7 +62,7 @@ impl Media {
         let mut media_string = String::new();
         stdin.read_line(&mut media_string).unwrap();
 
-        let media_type = match media_string.trim() {
+        let mediatype = match media_string.trim() {
             "Video" => MediaType::Video,
             "Game" => MediaType::Game,
             "Book" => MediaType::Book,
@@ -78,9 +81,9 @@ impl Media {
         let finished: bool = finished_string.trim().parse().unwrap_or(false);
 
         Media {
-            name: name,
-            mediatype: media_type,
-            finished: finished,
+            name,
+            mediatype,
+            finished,
         }
     }
 }
