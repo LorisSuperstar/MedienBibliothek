@@ -1,5 +1,6 @@
 use std::{
-    io,
+    fs::File,
+    io::{self, Write, stdin},
     usize::{self},
 };
 
@@ -19,6 +20,21 @@ struct Media {
 }
 
 fn main() {
+    println!("do you want to open an existing Media libary or make a new one? (new) (open)");
+
+    let mut descision = String::new();
+    io::stdin().read_line(&mut descision).unwrap();
+
+    let mut file = if descision.trim() == "new" {
+        println!("what should the name be? pls with .txt");
+        let mut filename = String::new();
+        io::stdin().read_line(&mut filename).unwrap();
+
+        File::create(filename.trim()).unwrap()
+    } else {
+        panic!();
+    };
+
     let mut media_list = Vec::new();
 
     loop {
@@ -34,7 +50,7 @@ fn main() {
                 );
                 continue;
             }
-            "new" => media_list.push(Media::new()),
+            "new" => media_list.push(Media::make_new_media()),
             "list" => list(&media_list),
             "remove" => {
                 let index = delete(&media_list);
@@ -50,11 +66,13 @@ fn main() {
                 continue;
             }
         }
+        file.write_all(format!("{:?}", media_list).as_bytes())
+            .expect("Failed to write to file");
     }
 }
 
 impl Media {
-    pub fn new() -> Media {
+    pub fn make_new_media() -> Media {
         // name
         println!("name?");
 
