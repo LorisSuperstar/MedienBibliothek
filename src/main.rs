@@ -1,8 +1,6 @@
 use std::{
-    fmt::write,
-    fs::{File, OpenOptions},
-    io::{self, Seek, Write, stdin},
-    ptr::read,
+    fs::OpenOptions,
+    io::{self, Seek, Write},
     usize::{self},
 };
 
@@ -33,6 +31,8 @@ fn main() {
         .create(true)
         .open(file_name.trim())
         .expect("failed to open file");
+
+    // TODO Read new file into media_list
     let mut media_list = Vec::new();
 
     loop {
