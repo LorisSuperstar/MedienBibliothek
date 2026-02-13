@@ -1,1 +1,1 @@
-[]
+Media { name: "nwe", mediatype: Video, finished: false }

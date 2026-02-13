@@ -1,6 +1,8 @@
 use std::{
-    fs::File,
-    io::{self, Write, stdin},
+    fmt::write,
+    fs::{File, OpenOptions},
+    io::{self, Seek, Write, stdin},
+    ptr::read,
     usize::{self},
 };
 
@@ -20,21 +22,17 @@ struct Media {
 }
 
 fn main() {
-    println!("do you want to open an existing Media libary or make a new one? (new) (open)");
+    println!("What File do you want to change? (if it doesnt exist it creates a new one)");
 
-    let mut descision = String::new();
-    io::stdin().read_line(&mut descision).unwrap();
+    let mut file_name = String::new();
+    io::stdin().read_line(&mut file_name).unwrap();
 
-    let mut file = if descision.trim() == "new" {
-        println!("what should the name be? pls with .txt");
-        let mut filename = String::new();
-        io::stdin().read_line(&mut filename).unwrap();
-
-        File::create(filename.trim()).unwrap()
-    } else {
-        panic!();
-    };
-
+    let mut file = OpenOptions::new()
+        .read(true)
+        .write(true)
+        .create(true)
+        .open(file_name.trim())
+        .expect("failed to open file");
     let mut media_list = Vec::new();
 
     loop {
@@ -66,8 +64,14 @@ fn main() {
                 continue;
             }
         }
-        file.write_all(format!("{:?}", media_list).as_bytes())
-            .expect("Failed to write to file");
+        // clear file
+        file.set_len(0);
+        // set writer at begining
+        file.rewind().unwrap();
+
+        for i in &media_list {
+            write!(file, "{:?}", i).unwrap();
+        }
     }
 }
 
