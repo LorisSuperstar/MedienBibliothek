@@ -1,7 +1,6 @@
 use std::{
     io,
-    ops::Index,
-    usize::{self, MAX},
+    usize::{self},
 };
 
 #[derive(Debug)]
