@@ -1,4 +1,8 @@
-use std::io;
+use std::{
+    io,
+    ops::Index,
+    usize::{self, MAX},
+};
 
 #[derive(Debug)]
 enum MediaType {
@@ -26,11 +30,21 @@ fn main() {
 
         match user_input.trim() {
             "help" => {
-                println!("<new> => add new Media, <list> => list all your Media");
+                println!(
+                    "<new> => add new Media, <list> => list all your Media <remove> => remove a Media"
+                );
                 continue;
             }
             "new" => media_list.push(Media::new()),
             "list" => list(&media_list),
+            "remove" => {
+                let index = delete(&media_list);
+                if index < media_list.len() {
+                    media_list.remove(index);
+                } else {
+                    continue;
+                }
+            }
 
             _ => {
                 println!("Command doesnt exist");
@@ -85,4 +99,20 @@ fn list(media_list: &Vec<Media>) {
     for i in 0..media_list.len() {
         println!("{:?}", media_list[i]);
     }
+}
+
+fn delete(media_list: &Vec<Media>) -> usize {
+    println!("what do you want to delete?");
+    list(&media_list);
+    let mut media = String::new();
+    io::stdin().read_line(&mut media).unwrap();
+
+    for i in 0..media_list.len() {
+        if media_list[i].name == media.trim() {
+            return i;
+        }
+    }
+
+    println!("name wasnt found");
+    usize::MAX
 }
